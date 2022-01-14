@@ -12,6 +12,7 @@ const knex = require('knex')({
         ssl: { rejectUnauthorized: false }
     }
 })
+
 let checkToken = (req, res, next) => {
     let authToken = req.headers["authorization"]
     if (!authToken) {
