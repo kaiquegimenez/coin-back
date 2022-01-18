@@ -2,7 +2,6 @@ const express = require('express');
 const routes = express.Router();
 
 const UserController = require('../controllers/UserController')
-const CoinController = require('../controllers/CoinController')
 const AdmController = require('../controllers/AdminController')
 const AuthController = require('../controllers/AutenticacaoController')
 
@@ -15,10 +14,9 @@ routes
     .put('/users', UserController.atualizaUsuario)
     .delete('/users', UserController.deletaUsuario)
     //coins
-    .get('/coins', CoinController.index)
-    .post('/coins', CoinController.criarCoin)
+    .post('/coins/changes', UserController.trocarCoin)
     //admin
-    .get('/usuarios', )
+    .post('/adm/product', AdmController.adicionarProduto)
 
 
 module.exports = routes;

@@ -15,7 +15,10 @@ module.exports = {
         return res.json('produto')
     },
     async adicionarProduto(req, res, next) {
+        const { nome, valor } = req.body;
+        knex('produto').insert({nome, valor}).catch(err => next(err));
 
+        return res.send();
     },
     async atualizaProduto(req, res, next) {
 

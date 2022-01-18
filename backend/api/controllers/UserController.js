@@ -73,5 +73,47 @@ module.exports = {
             error.status = 404;
             next(error)
         }
+    },
+    async trocarCoin(req, res, next){
+        const { idProduto, idUsuario } = req.body;
+        var saldoUsuario;
+        var valorProduto;
+        try {
+            saldoUsuario = await getSaldoUsuario(idUsuario).then(user => user[0].saldo);
+            valorProduto = await getValorProduto(idProduto).then(product => product[0].valor);
+            
+            if(valorProduto > saldoUsuario){
+                throw new Error('Saldo insuficiente para esse produto');
+            }
+
+            saldoUsuario -= valorProduto;
+    
+            await knex('coin').update({saldo: saldoUsuario}).where({usuario_id: idUsuario});
+    
+            await knex('troca').insert({
+                id_usuario: idUsuario,
+                id_produto: idProduto
+            }).catch(err => new Error(err))
+    
+            return res.send()
+        } catch (error) {
+            error.status = 400;
+            next(error)
+        }
+
     }
+}
+
+function getValorProduto(idProduto) {
+    if (idProduto) {
+        return knex('produto').where({ id: idProduto }).select('valor');
+    }
+    throw new Error('Produto inválido.');
+}
+
+function getSaldoUsuario(idUsuario) {
+    if (idUsuario) {
+        return knex('coin').where({ usuario_id: idUsuario }).select('saldo');
+    }
+    throw new Error('Usuário inválido.');
 }
