@@ -16,6 +16,12 @@ routes
     //coins
     .post('/coins/changes', UserController.trocarCoin)
     //admin
+    .get('/adm/users', AdmController.listarUsuarios)
+    .delete('/adm/users', AdmController.excluirUsuario)
+    .put('/adm/users/coins', AdmController.creditarCoin)
+    .get('/adm/product', AdmController.listarProduto)
+    .delete('/adm/product', AdmController.excluirProduto)
+    .put('/adm/product', AdmController.atualizaProduto)
     .post('/adm/product', AdmController.adicionarProduto)
 
 

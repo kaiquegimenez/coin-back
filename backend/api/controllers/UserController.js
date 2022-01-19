@@ -1,16 +1,36 @@
 const knex = require("../database")
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const constants = require("../config/Constants");
 
 module.exports = {
     async index(req, res, next) {
         try {
             const { id } = req.params;
             const result = await knex('usuario')
-            .where('id', '=', id)
-            .andWhere('deletado_em', null);
+            .select('usuario.id', 'usuario.nome', 'usuario.email', 'produto.nome as produtos', 'coin.saldo')
+            .leftJoin('troca', {'troca.id_usuario':'usuario.id'})
+            .leftJoin('produto', {'produto.id': 'troca.id_produto'})
+            .innerJoin('coin', {'coin.usuario_id':'usuario.id'})
+            .where('usuario.id', '=', id)
+            .then(result => {
+                return result.reduce((prod, prodEntry) => {
+                    if (!prod.produtos) {
+                        prod.id = prodEntry.id;
+                        prod.email = prodEntry.email;
+                        prod.nome = prodEntry.nome;
+                        prod.saldo = prodEntry.saldo;
+                        prod.produtos = [];
+                    }
+                    prod.produtos.push(prodEntry.produtos);
+                    return prod;
+            }, {})})
+            // .andWhere('usuario.deletado_em', null);
+            // if(result.length == 0){
+            //     throw new Error()
+            // }
             return res.json(result);
         } catch (error) {
-            error.message = "Usuário não encontrado.";
+            error.message = constants.USUARIO_NAO_ENCONTRADO;
             error.status = 404;
             next(error)
         }
@@ -35,7 +55,7 @@ module.exports = {
             }else{
                 throw new Error('Dados obrigatórios não informados.')
             }
-            return res.status(201).send();
+            return res.status(201).json({message: constants.USUARIO_CRIADO_SUCESSO});
         } catch (error) {
             next(error)
         }
@@ -52,9 +72,9 @@ module.exports = {
                 .update({ senha }).where({id})
             }
 
-            return res.send()
+            return res.json({message: constants.USUARIO_ATUALIZADO_SUCESSO});
         } catch (error) {
-            error.message = "Usuário não encontrado.";
+            error.message = constants.USUARIO_NAO_ENCONTRADO;
             error.status = 404;
             next(error)
         }
