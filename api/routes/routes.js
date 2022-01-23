@@ -17,7 +17,7 @@ routes
     //coins
     .post('/coins/changes', tokenUtil.verificarToken, UserController.trocarCoin)
     //admin
-    .get('/adm/users', tokenUtil.verificarToken, AdmController.isAdmin, AdmController.listarUsuarios)
+    .get('/list/users', tokenUtil.verificarToken, AdmController.listarUsuarios)
     .delete('/adm/users', tokenUtil.verificarToken, AdmController.excluirUsuario)
     .put('/adm/users/coins', tokenUtil.verificarToken, AdmController.creditarCoin)
     .get('/adm/product', tokenUtil.verificarToken, AdmController.listarProduto)
