@@ -11,7 +11,7 @@ routes
     .post('/login', AuthController.index)
     //usuários
     .post('/users', UserController.criarUsuario)
-    .get('/users/:id', tokenUtil.verificarToken, UserController.index)
+    .get('/users', tokenUtil.verificarToken, UserController.index)
     .put('/users', tokenUtil.verificarToken,UserController.atualizaUsuario)
     .delete('/users', tokenUtil.verificarToken, UserController.deletaUsuario)
     //coins

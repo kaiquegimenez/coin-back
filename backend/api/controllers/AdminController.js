@@ -87,7 +87,7 @@ module.exports = {
         }
     },
     async isAdmin(req, res, next) {
-        const { id } = req.usuarioId
+        const id = req.usuarioId
         await knex('usuario').where({ id })
             .then((usuarios) => {
                 if (usuarios.length) {

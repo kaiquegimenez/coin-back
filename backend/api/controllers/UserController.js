@@ -5,7 +5,7 @@ const constants = require("../config/Constants");
 module.exports = {
     async index(req, res, next) {
         try {
-            const { id } = req.params;
+            const id = req.usuarioId;
             const result = await knex('usuario')
             .select('usuario.id', 'usuario.nome', 'usuario.email', 'produto.nome as produtos', 'coin.saldo')
             .leftJoin('troca', {'troca.id_usuario':'usuario.id'})
