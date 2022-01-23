@@ -15,18 +15,21 @@ module.exports = {
                 if (checkSenha) {
                     var tokenJWT = tokenUtil.gerarToken(usuario.id);
                     res.status(200).json({
-                        id: usuario.id,
-                        login: usuario.email,
-                        nome: usuario.nome,
-                        roles: usuario.perfil,
-                        token: tokenJWT
+                        success: true,
+                        user: {
+                            id: usuario.id,
+                            login: usuario.email,
+                            nome: usuario.nome,
+                            roles: usuario.perfil,
+                            token: tokenJWT
+                        }
                     })
                     return
                 }else{
-                    res.status(200).json({ message: 'Login ou senha incorretos' })
+                    res.status(200).json({ success: false, message: 'Login ou senha incorretos' })
                 }
             }else {
-                res.status(200).json({ message: 'Login ou senha incorretos' })
+                res.status(200).json({ success: false, message: 'Login ou senha incorretos' })
             }
         })
         .catch(error => next(error))
