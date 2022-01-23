@@ -5,8 +5,8 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('coin').insert([
-        { saldo: 2, usuario_id: 1},
-        { saldo: 10, usuario_id: 2}
+        { saldo: 250, usuario_id: 1},
+        { saldo: 10000, usuario_id: 2}
       ]);
     });
 };

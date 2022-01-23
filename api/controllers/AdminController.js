@@ -25,8 +25,8 @@ module.exports = {
     },
     async adicionarProduto(req, res, next) {
         try {
-            const { nome, valor } = req.body;
-            knex('produto').insert({nome, valor}).catch(err => next(err));
+            const { nome, valor, descricao } = req.body;
+            knex('produto').insert({nome, valor, descricao}).catch(err => next(err));
     
             return res.json({message: constants.PRODUTO_CRIADO_SUCESSO});
         } catch (error) {
@@ -35,7 +35,7 @@ module.exports = {
     },
     async atualizaProduto(req, res, next) {
         try {
-            const {id, nome, valor} = req.body;
+            const {id, nome, valor, descricao} = req.body;
             if(nome){
                 await knex('produto')
                 .update({ nome }).where({id})
@@ -43,6 +43,10 @@ module.exports = {
             if(valor){
                 await knex('produto')
                 .update({ valor }).where({id})
+            }
+            if(descricao){
+                await knex('produto')
+                .update({ descricao }).where({id})
             }
 
             return res.json({message: constants.PRODUTO_ATUALIZADO_SUCESSO})
