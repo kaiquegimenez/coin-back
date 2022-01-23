@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 let PORT = process.env.PORT || 3000;
 
@@ -8,6 +9,7 @@ const app = express();
 app.use(express.json())
 app.use(routes);
 
+app.use(cors());
 app.use((req, res, next) => {
     const error = new Error('Not Found');
     error.status = 404;
