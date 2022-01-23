@@ -1,5 +1,5 @@
 const knex = require("../database")
-const constants = require('../config/Constants');
+const constants = require('../config/constants');
 
 module.exports = {
 

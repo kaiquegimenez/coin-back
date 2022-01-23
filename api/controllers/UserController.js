@@ -1,6 +1,6 @@
 const knex = require("../database")
 const bcrypt = require('bcryptjs');
-const constants = require("../config/Constants");
+const constants = require("../config/constants");
 
 module.exports = {
     async index(req, res, next) {
