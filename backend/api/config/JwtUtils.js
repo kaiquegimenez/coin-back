@@ -1,12 +1,13 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const constants = require('./constants')
 
 module.exports = {
 
     verificarToken(req, res, next){
         let authToken = req.headers["authorization"]
         if (!authToken) {
-            res.status(401).json({ message: 'Token de acesso requerida' })
+            res.status(401).json({ message: constants.TOKEN_REQUERIDO })
         }
         else {
             let token = authToken.split(' ')[1]
@@ -14,7 +15,7 @@ module.exports = {
         }
         jwt.verify(req.token, process.env.SECRET_KEY, (err, decodeToken) => {
             if (err) {
-                res.status(401).json({ message: 'Acesso negado' })
+                res.status(401).json({ message: constants.ACESSO_NEGADO })
                 return
             }
             req.usuarioId = decodeToken.id

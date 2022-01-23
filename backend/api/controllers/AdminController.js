@@ -93,21 +93,21 @@ module.exports = {
                 if (usuarios.length) {
                     let usuario = usuarios[0]
                     let roles = usuario.perfil.split(';')
-                    let adminRole = roles.find(i => i === 'ADMIN')
-                    if (adminRole === 'ADMIN') {
+                    let adminRole = roles.find(i => i === 'ADM')
+                    if (adminRole === 'ADM') {
                         next()
                         return
                     }
                     else {
-                        res.status(403).json({ message: 'Role de ADMIN requerida' })
+                        res.status(403).json({ message: constants.FUNCIONALIDADE_INDISPONIVEL })
                         return
                     }
                 }
             })
             .catch(err => {
-                res.status(500).json({
-                    message: 'Erro ao verificar roles de usuário - ' + err.message
-                })
+                err.status = 403
+                err.message = constants.FUNCIONALIDADE_INDISPONIVEL;
+                next(err)
             })
     }
 }

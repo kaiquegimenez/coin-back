@@ -1,3 +1,4 @@
+require('dotenv').config()
 const knex = require("../database")
 const bcrypt = require("bcryptjs")
 const tokenUtil = require('../config/JwtUtils')
@@ -13,19 +14,40 @@ module.exports = {
                 let checkSenha = bcrypt.compareSync(senha, usuario.senha)
                 if (checkSenha) {
                     var tokenJWT = tokenUtil.gerarToken(usuario.id);
+                    res.status(200).json({
+                        id: usuario.id,
+                        login: usuario.email,
+                        nome: usuario.nome,
+                        roles: usuario.perfil,
+                        token: tokenJWT
+                    })
+                    return
+                }else{
+                    res.status(200).json({ message: 'Login ou senha incorretos' })
                 }
-                res.status(200).json({
-                    id: usuario.id,
-                    login: usuario.email,
-                    nome: usuario.nome,
-                    roles: usuario.perfil,
-                    token: tokenJWT
-                })
-                return
             }else {
                 res.status(200).json({ message: 'Login ou senha incorretos' })
             }
         })
         .catch(error => next(error))
+    },
+    async checkToken(req, res, next){
+        let authToken = req.headers["authorization"]
+        if (!authToken) {
+            res.status(401).json({ message: 'Token de acesso requerida' })
+        }
+        else {
+            let token = authToken.split(' ')[1]
+            req.token = token
+        }
+        jwt.verify(req.token, process.env.SECRET_KEY, (err, decodeToken) => {
+            if (err) {
+                res.status(401).json({ message: 'Acesso negado' })
+                return
+            }
+            req.usuarioId = decodeToken.id
+            next()
+        })
     }
+
 }

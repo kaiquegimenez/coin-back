@@ -11,5 +11,8 @@ module.exports ={
     //Mensagens de falha
     USUARIO_NAO_ENCONTRADO: 'Usuário não encontrato',
     PRODUTO_NAO_ENCONTRADO: 'Produto não encontrato',
+    FUNCIONALIDADE_INDISPONIVEL: 'Essa funcionalidade não está disponível.',
+    ACESSO_NEGADO: 'Acesso negado',
+    TOKEN_REQUERIDO: 'Token de acesso requerida'
 
 }
