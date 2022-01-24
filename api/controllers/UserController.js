@@ -87,7 +87,7 @@ module.exports = {
             .where({ id })
             .catch(err => console.log(err));
 
-            return res.status(200).json({succes:true, message: 'Usuário deletado com sucesso'})
+            return res.status(200).json({success:true, message: 'Usuário deletado com sucesso'})
         } catch (error) {
             error.message = "Usuário não encontrado.";
             error.status = 404;
