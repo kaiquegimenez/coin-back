@@ -53,9 +53,9 @@ module.exports = {
                     .catch(err => next(err));
                     
             }else{
-                throw new Error('Dados obrigatórios não informados.')
+                return res.status(200).json({success: false, message:'Dados obrigatórios não informados.'})
             }
-            return res.status(201).json({message: constants.USUARIO_CRIADO_SUCESSO});
+            return res.status(201).json({success: true, message: constants.USUARIO_CRIADO_SUCESSO});
         } catch (error) {
             next(error)
         }
