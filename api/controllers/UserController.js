@@ -103,7 +103,7 @@ module.exports = {
             valorProduto = await getValorProduto(idProduto).then(product => product[0].valor);
             
             if(valorProduto > saldoUsuario){
-                res.json({ message:'Saldo insuficiente para esse produto', success: false });
+                return res.json({ message:'Saldo insuficiente para esse produto', success: false });
             }
 
             saldoUsuario -= valorProduto;
