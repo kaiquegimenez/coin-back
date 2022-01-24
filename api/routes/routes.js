@@ -13,7 +13,7 @@ routes
     .post('/users', UserController.criarUsuario)
     .get('/users', tokenUtil.verificarToken, UserController.index)
     .put('/users', tokenUtil.verificarToken,UserController.atualizaUsuario)
-    .delete('/users', tokenUtil.verificarToken, UserController.deletaUsuario)
+    .put('/user/delete', tokenUtil.verificarToken, UserController.deletaUsuario)
     //coins
     .post('/coins/changes', tokenUtil.verificarToken, UserController.trocarCoin)
     //admin
