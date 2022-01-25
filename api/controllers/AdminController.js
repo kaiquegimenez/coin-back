@@ -59,6 +59,8 @@ module.exports = {
     },
     async excluirProduto(req, res, next) {
         try {
+            // console.log(req)
+            console.log(req.body)
             const { id } = req.body;
             console.log(id)
             await knex('produto')
