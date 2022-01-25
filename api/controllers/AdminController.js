@@ -8,7 +8,7 @@ module.exports = {
             const result = await knex('usuario')
             .select('usuario.id', 'usuario.email', 'usuario.nome', 'usuario.perfil', 'coin.saldo','usuario.deletado_em' )
             .innerJoin('coin', {'coin.usuario_id':'usuario.id'});
-            return res.json(result);
+            return res.status(200).json(result);
         } catch (error) {
             error.message = "Usuário não encontrado.";
             error.status = 404;
@@ -18,7 +18,7 @@ module.exports = {
     async listarProduto(req, res, next) {
         try {
             const result = await knex('produto')
-            return res.json(result)
+            return res.status(200).json(result)
         } catch (error) {
             next(error)
         }
@@ -28,7 +28,7 @@ module.exports = {
             const { nome, valor, descricao } = req.body;
             knex('produto').insert({nome, valor, descricao}).catch(err => next(err));
     
-            return res.json({success: true, message: constants.PRODUTO_CRIADO_SUCESSO});
+            return res.status(200).json({success: true, message: constants.PRODUTO_CRIADO_SUCESSO});
         } catch (error) {
             next(error)
         }
@@ -49,7 +49,7 @@ module.exports = {
                 .update({ descricao }).where({id})
             }
 
-            return res.json({success: true, message: constants.PRODUTO_ATUALIZADO_SUCESSO})
+            return res.status(200).json({success: true, message: constants.PRODUTO_ATUALIZADO_SUCESSO})
         } catch (error) {
             error.success= false;
             error.message = constants.PRODUTO_NAO_ENCONTRADO;
@@ -66,7 +66,7 @@ module.exports = {
             await knex('produto')
             .where({id}).del();
 
-            return res.json({success: true, message: constants.PRODUTO_EXCLUIDO_SUCESSO});
+            return res.status(200).json({success: true, message: constants.PRODUTO_EXCLUIDO_SUCESSO});
         } catch (error) {
             next(error)
         }
@@ -77,7 +77,7 @@ module.exports = {
             await knex('usuario')
             .where({id}).del();
 
-            return res.json({success: true, message: constants.USUARIO_EXLUIDO_SUCESSO})
+            return res.status(200).json({success: true, message: constants.USUARIO_EXLUIDO_SUCESSO})
         } catch (error) {
             next(error)
         }
@@ -88,7 +88,7 @@ module.exports = {
 
             await knex('coin').update({saldo: saldo}).where({usuario_id: id});
     
-            return res.json({success: true, message: constants.CREDITAR_COIN_SUCESSO})
+            return res.status(200).json({success: true, message: constants.CREDITAR_COIN_SUCESSO})
         } catch (error) {
             next(error)
         }

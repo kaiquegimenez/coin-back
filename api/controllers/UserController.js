@@ -28,7 +28,7 @@ module.exports = {
             // if(result.length == 0){
             //     throw new Error()
             // }
-            return res.json(result);
+            return res.status(200).json(result);
         } catch (error) {
             error.message = constants.USUARIO_NAO_ENCONTRADO;
             error.status = 404;
@@ -77,14 +77,14 @@ module.exports = {
             }
 
             if(saldo){
-                await knex('usuario')
-                .update({ saldo }).where({id})
+                await knex('coin')
+                .update({ saldo }).where({usuario_id: id})
             }
 
-            return res.json({message: constants.USUARIO_ATUALIZADO_SUCESSO});
+            return res.status(200).json({success: true, message: constants.USUARIO_ATUALIZADO_SUCESSO});
         } catch (error) {
             error.message = constants.USUARIO_NAO_ENCONTRADO;
-            error.status = 404;
+            error.status = 500;
             next(error)
         }
     },
@@ -125,7 +125,7 @@ module.exports = {
                 id_produto: idProduto
             }).catch(err => new Error(err))
     
-            return res.json({ message: 'Produto comprado', success: true })
+            return res.status(200).json({ message: 'Produto comprado', success: true })
         } catch (error) {
             error.status = 400;
             next(error)
