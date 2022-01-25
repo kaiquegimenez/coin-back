@@ -62,7 +62,8 @@ module.exports = {
     },
     async atualizaUsuario(req, res, next) {
         try {
-            const {id, nome, senha} = req.body;
+            const id = req.usuarioId;
+            const { nome, senha } = req.body;
             if(nome){
                 await knex('usuario')
                 .update({ nome }).where({id})
@@ -81,7 +82,7 @@ module.exports = {
     },
     async deletaUsuario(req, res, next){
         try {
-            const { id } = req.body;
+            const id = req.usuarioId;
             await knex('usuario')
             .update('deletado_em', new Date())
             .where({ id })
@@ -121,6 +122,32 @@ module.exports = {
             next(error)
         }
 
+    },
+    async transferirCoin(req, res, next){
+
+        const id = req.usuarioId;
+        const { idDestino, valor } = req.body;
+        try {            
+            saldoUsuario = await getSaldoUsuario(id).then(user => user[0].saldo);
+            
+            if(saldoUsuario < valor){
+                throw new Error('Saldo insuficiente para realizar a transferência');
+            }
+            saldoUsuario -= valor;
+    
+            await knex('coin').update({saldo: saldoUsuario}).where({usuario_id: id});
+    
+            saldoUsuarioDestino = await getSaldoUsuario(idDestino).then(user => user[0].saldo);
+    
+            saldoUsuarioDestino += valor;
+    
+            await knex('coin').update({saldo: saldoUsuarioDestino}).where({usuario_id: idDestino});
+    
+            return res.json('Transferência realizada com sucesso.');
+        } catch (error) {
+            error.status = 400;
+            next(error);
+        }
     }
 }
 
