@@ -28,7 +28,7 @@ module.exports = {
             // if(result.length == 0){
             //     throw new Error()
             // }
-            return res.json(result);
+            return res.status(200).json(result);
         } catch (error) {
             error.message = constants.USUARIO_NAO_ENCONTRADO;
             error.status = 404;
@@ -53,9 +53,9 @@ module.exports = {
                     .catch(err => next(err));
                     
             }else{
-                throw new Error('Dados obrigatórios não informados.')
+                return res.status(200).json({success: false, message:'Dados obrigatórios não informados.'})
             }
-            return res.status(201).json({message: constants.USUARIO_CRIADO_SUCESSO});
+            return res.status(201).json({success: true, message: constants.USUARIO_CRIADO_SUCESSO});
         } catch (error) {
             next(error)
         }
@@ -72,11 +72,20 @@ module.exports = {
                 await knex('usuario')
                 .update({ senha }).where({id})
             }
+            if(email){
+                await knex('usuario')
+                .update({ email }).where({id})
+            }
 
-            return res.json({message: constants.USUARIO_ATUALIZADO_SUCESSO});
+            if(saldo){
+                await knex('coin')
+                .update({ saldo }).where({usuario_id: id})
+            }
+
+            return res.status(200).json({success: true, message: constants.USUARIO_ATUALIZADO_SUCESSO});
         } catch (error) {
             error.message = constants.USUARIO_NAO_ENCONTRADO;
-            error.status = 404;
+            error.status = 500;
             next(error)
         }
     },
@@ -88,10 +97,11 @@ module.exports = {
             .where({ id })
             .catch(err => console.log(err));
 
-            return res.send()
+            return res.status(200).json({success:true, message: 'Usuário deletado com sucesso'})
         } catch (error) {
             error.message = "Usuário não encontrado.";
             error.status = 404;
+            error.success = false;
             next(error)
         }
     },
@@ -104,7 +114,7 @@ module.exports = {
             valorProduto = await getValorProduto(idProduto).then(product => product[0].valor);
             
             if(valorProduto > saldoUsuario){
-                throw new Error('Saldo insuficiente para esse produto');
+                return res.json({ message:'Saldo insuficiente para esse produto', success: false });
             }
 
             saldoUsuario -= valorProduto;
@@ -116,7 +126,7 @@ module.exports = {
                 id_produto: idProduto
             }).catch(err => new Error(err))
     
-            return res.send()
+            return res.status(200).json({ message: 'Produto comprado', success: true })
         } catch (error) {
             error.status = 400;
             next(error)
