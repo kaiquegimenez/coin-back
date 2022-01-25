@@ -62,7 +62,7 @@ module.exports = {
     },
     async atualizaUsuario(req, res, next) {
         try {
-            const {id, nome, senha, email, valor} = req.body;
+            const {id, nome, senha, email, saldo} = req.body;
             if(nome){
                 await knex('usuario')
                 .update({ nome }).where({id})
@@ -76,9 +76,9 @@ module.exports = {
                 .update({ email }).where({id})
             }
 
-            if(valor){
+            if(saldo){
                 await knex('usuario')
-                .update({ valor }).where({id})
+                .update({ saldo }).where({id})
             }
 
             return res.json({message: constants.USUARIO_ATUALIZADO_SUCESSO});
