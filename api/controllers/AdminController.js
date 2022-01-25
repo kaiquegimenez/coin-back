@@ -28,7 +28,7 @@ module.exports = {
             const { nome, valor, descricao } = req.body;
             knex('produto').insert({nome, valor, descricao}).catch(err => next(err));
     
-            return res.json({message: constants.PRODUTO_CRIADO_SUCESSO});
+            return res.json({success: true, message: constants.PRODUTO_CRIADO_SUCESSO});
         } catch (error) {
             next(error)
         }
