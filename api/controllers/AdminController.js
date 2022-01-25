@@ -49,8 +49,9 @@ module.exports = {
                 .update({ descricao }).where({id})
             }
 
-            return res.json({message: constants.PRODUTO_ATUALIZADO_SUCESSO})
+            return res.json({success: true, message: constants.PRODUTO_ATUALIZADO_SUCESSO})
         } catch (error) {
+            error.success= false;
             error.message = constants.PRODUTO_NAO_ENCONTRADO;
             error.status = 404;
             next(error)
@@ -63,7 +64,7 @@ module.exports = {
             await knex('produto')
             .where({id}).del();
 
-            return res.json({message: constants.PRODUTO_EXCLUIDO_SUCESSO});
+            return res.json({success: true, message: constants.PRODUTO_EXCLUIDO_SUCESSO});
         } catch (error) {
             next(error)
         }
@@ -74,7 +75,7 @@ module.exports = {
             await knex('usuario')
             .where({id}).del();
 
-            return res.json({message: constants.USUARIO_EXLUIDO_SUCESSO})
+            return res.json({success: true, message: constants.USUARIO_EXLUIDO_SUCESSO})
         } catch (error) {
             next(error)
         }
@@ -85,7 +86,7 @@ module.exports = {
 
             await knex('coin').update({saldo: saldo}).where({usuario_id: id});
     
-            return res.json({message: constants.CREDITAR_COIN_SUCESSO})
+            return res.json({success: true, message: constants.CREDITAR_COIN_SUCESSO})
         } catch (error) {
             next(error)
         }
