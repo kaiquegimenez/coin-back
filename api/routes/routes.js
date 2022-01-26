@@ -25,7 +25,7 @@ routes
     .delete('/adm/users', tokenUtil.verificarToken, admController.excluirUsuario)
     .put('/adm/users/coins', tokenUtil.verificarToken, admController.creditarCoin)
     .get('/adm/product', tokenUtil.verificarToken, admController.listarProduto)
-    .delete('/adm/product', tokenUtil.verificarToken, admController.excluirProduto)
+    .put('/adm/product', tokenUtil.verificarToken, admController.excluirProduto)
     .put('/adm/product', tokenUtil.verificarToken, admController.atualizaProduto)
     .post('/adm/product', tokenUtil.verificarToken, admController.adicionarProduto)
 
