@@ -21,11 +21,11 @@ routes
     //produtos
     .get('/products', tokenUtil.verificarToken, produtoController.index)
     //admin
-    .get('/adm/users', tokenUtil.verificarToken, admController.isAdmin, admController.listarUsuarios)
+    .get('/list/users', tokenUtil.verificarToken, admController.listarUsuarios)
     .delete('/adm/users', tokenUtil.verificarToken, admController.excluirUsuario)
     .put('/adm/users/coins', tokenUtil.verificarToken, admController.creditarCoin)
     .get('/adm/product', tokenUtil.verificarToken, admController.listarProduto)
-    .delete('/adm/product', tokenUtil.verificarToken, admController.excluirProduto)
+    .put('/delete/product', tokenUtil.verificarToken, admController.excluirProduto)
     .put('/adm/product', tokenUtil.verificarToken, admController.atualizaProduto)
     .post('/adm/product', tokenUtil.verificarToken, admController.adicionarProduto)
 
