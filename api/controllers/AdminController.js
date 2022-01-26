@@ -59,16 +59,15 @@ module.exports = {
     },
     async excluirProduto(req, res, next) {
         try {
-            // console.log(req)
-            console.log(req.body)
             const { id } = req.body;
             await knex('produto')
-            .update('deletado_em', new Date())
+            .update({'deletado_em': new Date()})
             .where({ id })
             .catch(err => next(err));
 
             return res.status(200).json({success: true, message: constants.PRODUTO_EXCLUIDO_SUCESSO});
         } catch (error) {
+            console.log("aqui")
             next(error)
         }
     },
