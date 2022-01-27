@@ -91,7 +91,7 @@ module.exports = {
     },
     async deletaUsuario(req, res, next){
         try {
-            const id = req.usuarioId;
+            const {id} = req.body;
             await knex('usuario')
             .update({'deletado_em': new Date()})
             .where({ id })
