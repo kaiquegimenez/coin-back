@@ -93,7 +93,7 @@ module.exports = {
         try {
             const id = req.usuarioId;
             await knex('usuario')
-            .update({deletado_em: new Date()})
+            .update({'deletado_em': new Date()})
             .where({ id })
             .catch(err => console.log(err));
 
