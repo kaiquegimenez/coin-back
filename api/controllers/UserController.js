@@ -70,7 +70,7 @@ module.exports = {
             }
             if(senha){
                 await knex('usuario')
-                .update({ senha }).where({id})
+                .update({ senha: bcrypt.hashSync(senha, 8) }).where({id})
             }
             if(email){
                 await knex('usuario')
