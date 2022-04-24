@@ -155,6 +155,23 @@ module.exports = {
             error.status = 400;
             next(error);
         }
+    },
+
+    async getNotificacoes(req, res, next) {
+        try {
+            const {id, page = 1} = req.query
+            const result = await knex('transferencias')
+            .select('transferencias.*', 'usuario.nome' )
+            .innerJoin('usuario', {'usuario.id':'transferencias.id_enviou'})
+            .where({id_recebeu: id})
+            .limit(10)
+            .offset((page - 1) * 10)
+            return res.status(200).json({success: true, notifications: result});
+        } catch (error) {
+            error.message = "Usuário não encontrado.";
+            error.status = 404;
+            next(error)
+        }
     }
 }
 
@@ -168,6 +185,13 @@ function getValorProduto(idProduto) {
 function getSaldoUsuario(idUsuario) {
     if (idUsuario) {
         return knex('coin').where({ usuario_id: idUsuario }).select('saldo');
+    }
+    throw new Error('Usuário inválido.');
+}
+
+function getTransferencias(idUser) {
+    if (idUser) {
+        return knex.select('*').from('transferencias').where({ id_recebeu: idUser })
     }
     throw new Error('Usuário inválido.');
 }

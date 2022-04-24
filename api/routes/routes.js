@@ -20,6 +20,8 @@ routes
     .post('/coins/changes', tokenUtil.verificarToken, userController.trocarCoin)
     //produtos
     .get('/products', tokenUtil.verificarToken, produtoController.index)
+    //Transferencias
+    .get('/transferencias', userController.getNotificacoes)
     //admin
     .get('/list/users', tokenUtil.verificarToken, admController.listarUsuarios)
     .delete('/adm/users', tokenUtil.verificarToken, admController.excluirUsuario)
