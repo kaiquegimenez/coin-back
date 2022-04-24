@@ -131,7 +131,7 @@ module.exports = {
     async transferirCoin(req, res, next){
 
         const id = req.usuarioId;
-        const { idDestino, valor, idUser } = req.body;
+        const { idDestino, valor, idUser, notificacao, enviadoEm } = req.body;
         try {            
             saldoUsuario = await getSaldoUsuario(idUser).then(user => user[0].saldo);
             
@@ -147,6 +147,8 @@ module.exports = {
             saldoUsuarioDestino += valor;
     
             await knex('coin').update({saldo: saldoUsuarioDestino}).where({usuario_id: idDestino});
+            
+            await knex('transferencias').insert({notificacao, valor, id_recebeu: idDestino, id_enviou: idUser, enviado_em: enviadoEm}).catch(err => next(err));
     
             return res.status(200).json({success: true, message: 'Transferência realizada com sucesso.'});
         } catch (error) {
