@@ -7,7 +7,7 @@ module.exports = {
         try {
             const id = req.usuarioId;
             const result = await knex('usuario')
-            .select('usuario.id', 'usuario.nome', 'usuario.email', 'produto.nome as produtos', 'coin.saldo')
+            .select('usuario.id', 'usuario.nome', 'usuario.email', 'usuario.bairro', 'usuario.cidade', 'usuario.numero', 'usuario.cep', 'usuario.telefone', 'usuario.estado', 'usuario.rua', 'produto.nome as produtos', 'coin.saldo')
             .leftJoin('troca', {'troca.id_usuario':'usuario.id'})
             .leftJoin('produto', {'produto.id': 'troca.id_produto'})
             .innerJoin('coin', {'coin.usuario_id':'usuario.id'})
@@ -19,6 +19,13 @@ module.exports = {
                         prod.email = prodEntry.email;
                         prod.nome = prodEntry.nome;
                         prod.saldo = prodEntry.saldo;
+                        prod.rua = prodEntry.rua;
+                        prod.cidade = prodEntry.cidade;
+                        prod.bairro = prodEntry.bairro;
+                        prod.numero = prodEntry.numero;
+                        prod.cep = prodEntry.cep;
+                        prod.telefone = prodEntry.telefone;
+                        prod.estado = prodEntry.estado;
                         prod.produtos = [];
                     }
                     prod.produtos.push(prodEntry.produtos);
@@ -37,12 +44,19 @@ module.exports = {
     },
     async criarUsuario(req, res, next) {
         try {
-            const {nome, senha, email } = req.body;
+            const {nome, senha, email, cidade, bairro, numero, cep, estado, telefone, rua } = req.body;
             if(nome && senha && email ){
                 await knex('usuario').insert({ 
                     nome, 
                     senha: bcrypt.hashSync(senha, 8), 
                     email,
+                    cidade,
+                    bairro,
+                    numero,
+                    cep,
+                    rua,
+                    telefone,
+                    estado,
                     perfil: 'COMUM'})
                     .returning('id')
                     .then(id => 
@@ -63,7 +77,7 @@ module.exports = {
     async atualizaUsuario(req, res, next) {
         try {
 
-            const { id, nome, senha, email } = req.body;
+            const { id, nome, senha, email, cidade, rua, telefone, estado, cep, numero, bairro } = req.body;
             if(nome){
                 await knex('usuario')
                 .update({ nome }).where({id})
@@ -76,7 +90,34 @@ module.exports = {
                 await knex('usuario')
                 .update({ email }).where({id})
             }
-
+            if(cidade){
+                await knex('usuario')
+                .update({ cidade }).where({id})
+            }
+            if(rua){
+                await knex('usuario')
+                .update({ rua }).where({id})
+            }
+            if(telefone){
+                await knex('usuario')
+                .update({ telefone }).where({id})
+            }
+            if(estado){
+                await knex('usuario')
+                .update({ estado }).where({id})
+            }
+            if(cep){
+                await knex('usuario')
+                .update({ cep }).where({id})
+            }
+            if(numero){
+                await knex('usuario')
+                .update({ numero }).where({id})
+            }
+            if(bairro){
+                await knex('usuario')
+                .update({ bairro }).where({id})
+            }
             return res.status(200).json({success: true, message: constants.USUARIO_ATUALIZADO_SUCESSO});
         } catch (error) {
             error.message = constants.USUARIO_NAO_ENCONTRADO;
