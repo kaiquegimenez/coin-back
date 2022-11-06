@@ -207,7 +207,7 @@ module.exports = {
         try {
             const {id, page = 1} = req.query
             const result = await knex('transferencias')
-            .select('transferencias.*', 'usuario.nome' )
+            .select('transferencias.*', 'usuario.*' )
             .innerJoin('usuario', {'usuario.id':'transferencias.id_enviou'})
             .where({id_recebeu: id})
             .limit(10)
