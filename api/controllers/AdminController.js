@@ -7,7 +7,8 @@ module.exports = {
         try {
             const result = await knex('usuario')
             .select('usuario.id', 'usuario.email', 'usuario.nome', 'usuario.perfil', 'coin.saldo','usuario.deletado_em' )
-            .innerJoin('coin', {'coin.usuario_id':'usuario.id'});
+            .innerJoin('coin', {'coin.usuario_id':'usuario.id'})
+            .where('usuario.perfil', '=', 'COMUM');
             return res.status(200).json(result);
         } catch (error) {
             error.message = "Usuário não encontrado.";

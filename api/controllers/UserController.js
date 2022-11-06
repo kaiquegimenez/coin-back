@@ -142,13 +142,13 @@ module.exports = {
         }
     },
     async trocarCoin(req, res, next){
-        const { idProduto, idUsuario } = req.body;
+        const { idProduto, idUsuario, enviadoEm } = req.body;
         var saldoUsuario;
         var valorProduto;
         try {
             saldoUsuario = await getSaldoUsuario(idUsuario).then(user => user[0].saldo);
             valorProduto = await getValorProduto(idProduto).then(product => product[0].valor);
-            
+            nomeProduto = await getNomeProduto(idProduto).then(product => product[0].nome);
             if(valorProduto > saldoUsuario){
                 return res.json({ message:'Saldo insuficiente para esse produto', success: false });
             }
@@ -156,12 +156,17 @@ module.exports = {
             saldoUsuario -= valorProduto;
     
             await knex('coin').update({saldo: saldoUsuario}).where({usuario_id: idUsuario});
-    
             await knex('troca').insert({
                 id_usuario: idUsuario,
                 id_produto: idProduto
             }).catch(err => new Error(err))
-    
+            await knex('transferencias').insert({
+                notificacao: ` comprou ${nomeProduto}, fazer o envio`, 
+                valor: valorProduto,
+                id_recebeu: 17,
+                id_enviou: idUsuario,
+                enviado_em: enviadoEm
+            }).catch(err => next(err));
             return res.status(200).json({ message: 'Produto comprado', success: true })
         } catch (error) {
             error.status = 400;
@@ -219,6 +224,13 @@ module.exports = {
 function getValorProduto(idProduto) {
     if (idProduto) {
         return knex('produto').where({ id: idProduto }).select('valor');
+    }
+    throw new Error('Produto inválido.');
+}
+
+function getNomeProduto(idProduto) {
+    if (idProduto) {
+        return knex('produto').where({ id: idProduto }).select('nome');
     }
     throw new Error('Produto inválido.');
 }
