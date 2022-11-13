@@ -228,7 +228,7 @@ module.exports = {
             .innerJoin('usuario', {'usuario.id':'transferencias.id_enviou'})
             .where({id_recebeu: id})
             .orWhere({id_enviou: id})
-            .limit(10)
+            .limit(20)
             .offset((page - 1) * 10)
             return res.status(200).json({success: true, notifications: result});
         } catch (error) {
