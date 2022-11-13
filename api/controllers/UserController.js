@@ -161,7 +161,7 @@ module.exports = {
                 id_produto: idProduto
             }).catch(err => new Error(err))
             await knex('transferencias').insert({
-                notificacao: ` comprou ${nomeProduto}, fazer o envio`, 
+                notificacao: nomeProduto, 
                 valor: valorProduto,
                 id_recebeu: 17,
                 id_enviou: idUsuario,
@@ -210,6 +210,24 @@ module.exports = {
             .select('transferencias.*', 'usuario.*' )
             .innerJoin('usuario', {'usuario.id':'transferencias.id_enviou'})
             .where({id_recebeu: id})
+            .limit(10)
+            .offset((page - 1) * 10)
+            return res.status(200).json({success: true, notifications: result});
+        } catch (error) {
+            error.message = "Usuário não encontrado.";
+            error.status = 404;
+            next(error)
+        }
+    },
+
+    async getExtrato(req, res, next) {
+        try {
+            const {id, page = 1} = req.query
+            const result = await knex('transferencias')
+            .select('transferencias.*', 'usuario.*' )
+            .innerJoin('usuario', {'usuario.id':'transferencias.id_enviou'})
+            .where({id_recebeu: id})
+            .orWhere({id_enviou: id})
             .limit(10)
             .offset((page - 1) * 10)
             return res.status(200).json({success: true, notifications: result});

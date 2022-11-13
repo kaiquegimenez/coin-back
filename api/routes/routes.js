@@ -22,6 +22,8 @@ routes
     .get('/products', tokenUtil.verificarToken, produtoController.index)
     //Transferencias
     .get('/transferencias', userController.getNotificacoes)
+    //Extrato
+    .get('/extrato', userController.getExtrato)
     //admin
     .get('/list/users', tokenUtil.verificarToken, admController.listarUsuarios)
     .delete('/adm/users', tokenUtil.verificarToken, admController.excluirUsuario)
